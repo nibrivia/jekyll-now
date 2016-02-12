@@ -39,3 +39,9 @@ plot
 
 This is interesting since it shows that Sanders is winning (points are y-negative), but is also shows that, at this point, Clinton is meeting or exceeding expectations. This disagrees the mainstream media narrative, unfortunately these narratives (apparently) have some influence on the future primaries, so we'll see.
 Another interesting thing that this might shed some light as to if momentum really exists.
+
+Edit history
+---
+
+Feb 12: changed to ggplot2
+Feb 10: original edit
