@@ -1,12 +1,11 @@
 ---
+layout: post
 title: "Democratic primary expectations v actual"
 author: "Olivia Brode-Roger"
 date: "February 10, 2016"
-output: 
-  html_document: 
 ---
 
-The data for the expectations come from http://cookpolitical.com/story/9179. At some point I will get around to computing these myself.
+The datum for the expectations come from http://cookpolitical.com/story/9179. At some point I will get around to computing these myself.
 
 ```{r}
 #expectations <- read.csv(file = '~/Projects/2016/expectations.csv', stringsAsFactors = FALSE)
