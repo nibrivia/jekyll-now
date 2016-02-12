@@ -5,6 +5,10 @@ author: "Olivia Brode-Roger"
 date: "February 10, 2016"
 ---
 
+```{r setup, include=FALSE}
+require(ggplot2)
+```
+
 The data for the expectations come from http://cookpolitical.com/story/9179. At some point I will get around to computing these myself.
 The delegate data is (so far) manually entered.
 
@@ -16,10 +20,10 @@ delegates <- data.frame(State = c("Iowa", "New Hampshire"),
 
 We can plot these against each other and see how well we do!
 This is using log-odds (more on that at later date).
+
 The more positive the number, the more the state is in support of Clinton and vice versa. 0 is perfectly equal. Above the line means Clinton is exceeding expecations, below Sanders, regardless of who "won" the state.
 
 ```{r}
-require(ggplot2)
 plot <- ggplot(delegates, aes(x = log(Clinton_expect/Sanders_expect), y = log(Clinton_percentage/Sanders_percentage),
                               fill = log(Clinton_expect/Sanders_expect) - log(Clinton_percentage/Sanders_percentage))) +
   #geom_text( aes(label=State), hjust = 0, vjust = 0 ) +
