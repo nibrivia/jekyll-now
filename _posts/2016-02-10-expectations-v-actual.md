@@ -1,4 +1,5 @@
 ---
+layout: post
 title: "Democratic primary expectations v actual"
 author: "Olivia Brode-Roger"
 date: "February 10, 2016"
