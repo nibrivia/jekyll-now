@@ -5,7 +5,7 @@ author: "Olivia Brode-Roger"
 date: "February 10, 2016"
 ---
 
-The datum for the expectations come from http://cookpolitical.com/story/9179. At some point I will get around to computing these myself.
+The data for the expectations come from http://cookpolitical.com/story/9179. At some point I will get around to computing these myself.
 
 
 {% highlight r %}
