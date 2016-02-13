@@ -13,7 +13,7 @@ The delegate data is (so far) manually entered.
 
 {% highlight r %}
 delegates <- data.frame(State = c("Iowa", "New Hampshire"),
-                        Clinton_percentage=c(23, 9), Sanders_percentage=c(21, 15),
+                        Clinton_percentage=c(49.86, 37.95), Sanders_percentage=c(49.57, 60.4),
                         Clinton_expect=c(13, 9), Sanders_expect=c(31, 15))
 {% endhighlight %}
 
@@ -27,8 +27,9 @@ The more positive the number, the more the state is in support of Clinton and vi
 plot <- ggplot(delegates, aes(x = log(Clinton_expect/Sanders_expect), y = log(Clinton_percentage/Sanders_percentage),
                               fill = log(Clinton_expect/Sanders_expect) - log(Clinton_percentage/Sanders_percentage))) +
   #geom_text( aes(label=State), hjust = 0, vjust = 0 ) +
-  geom_point( aes(size = Clinton_expect+Sanders_expect), shape=21) + scale_size_continuous(range = c(3,7)) +
-  scale_fill_gradientn(colours = c("blue", "grey", "red"), name="Candidate ahead", limits=c(-1,1)) +
+  geom_point( aes(size = Clinton_expect+Sanders_expect), shape=21) +
+  scale_size_continuous(range = c(2,7), limits = c(14,475)) +
+  scale_fill_gradientn(colours = c("blue", "grey", "red"), name="Candidate ahead", limits=c(-2,2)) +
   labs(title = "Expectations v Results", x = "Expectations", y = "Results", size = "Total delegates") +
   geom_abline(intercept = 0, slope=1, alpha = 0.5) +
   xlim(-1,1) + ylim(-1,1)
