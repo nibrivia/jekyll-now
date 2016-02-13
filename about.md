@@ -6,10 +6,4 @@ permalink: /about/
 
 I'm Olivia, more to come soon?
 
-### More Information
 
-A place to include any other types of information that you'd like to include about yourself.
-
-### Contact me
-
-[nibrivia@mit.edu][mailto:nibrivia@mit.edu]
