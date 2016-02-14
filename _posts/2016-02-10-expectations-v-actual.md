@@ -7,7 +7,7 @@ date: "February 10, 2016"
 
 
 
-The data for the expectations come from http://cookpolitical.com/story/9179. At some point I will get around to computing these myself.
+The data for the expectations come from the [Cook Political Report](http://cookpolitical.com/story/9179). At some point I will get around to computing these myself.
 The delegate data is (so far) manually entered.
 
 
@@ -18,9 +18,12 @@ delegates <- data.frame(State = c("Iowa", "New Hampshire"),
 {% endhighlight %}
 
 We can plot these against each other and see how well we do!
-This is using log-odds (more on that at later date).
+I much prefer [log-odds ratios]({% post_url 2016-02-13-why-I-prefer-log-odds-ratio %}) to percentages, which require a little bit of an intro.
 
-The more positive the number, the more the state is in support of Clinton and vice versa. 0 is perfectly equal. Above the line means Clinton is exceeding expecations, below Sanders, regardless of who "won" the state.
+The more positive the number, the more the state is in support of Clinton and vice versa.
+0 is perfectly equal, infinity is 100% Clinton and -infinity is 100% Sanders.
+A +/-1 is about one standard deviation off, which is 27 or 73%.
+Regardless of who "won" the state, above the diagonal means Clinton is exceeding expecations, below Sanders is.
 
 
 {% highlight r %}
@@ -38,12 +41,13 @@ plot
 
 ![center](/../figs/2016-02-10-expectations-v-actual/unnamed-chunk-2-1.png)
 
-This is interesting since it shows that Sanders is winning (points are y-negative), but is also shows that, at this point, Clinton is meeting or exceeding expectations. This disagrees the mainstream media narrative, unfortunately these narratives (apparently) have some influence on the future primaries, so we'll see.
+This is interesting since it shows that Sanders is "winning"" (points are y-negative), but it also shows that, at this point, Clinton is meeting or exceeding expectations.
+This disagrees the media narrative, which unfortunately has some influence on future primaries, so we'll see.
 Another interesting thing that this might shed some light as to if momentum really exists.
 
 Edit history
 ---
 
-Feb 12: changed to ggplot2
-
-Feb 10: original edit
+- Feb 14: edited language
+- Feb 12: changed to ggplot2
+- Feb 10: original edit
