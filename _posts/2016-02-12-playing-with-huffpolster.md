@@ -11,12 +11,11 @@ Today, I learned that the Huffington Post allows one to download all of its data
 Even better, someone wrote a library to do it for you! (https://github.com/rOpenGov/pollstR)
 
 This allows the gathering of a *lot* of data really easily, although it can take a while.
-The following gathers all data for the 2016 primary for each party, including all national and state polls.
+The following gathers all data for the 2016 primary for the democrats (the republicans are too much of a mess), including all national and state polls.
 Whoosh, data!
 
 {% highlight r %}
 d_polls <- pollstr_polls(topic = "2016-president-dem-primary", state = "US", max_pages=500)
-r_polls <- pollstr_polls(topic = "2016-president-gop-primary", state = "US", max_pages=500)
 length(d_polls$polls[,"id"])
 {% endhighlight %}
 
@@ -26,24 +25,12 @@ length(d_polls$polls[,"id"])
 ## [1] 257
 {% endhighlight %}
 
-
-
-{% highlight r %}
-length(r_polls$polls[,"id"])
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## [1] 287
-{% endhighlight %}
-
 So now, we can make cool plots, that look just like the ones the Huffington Post makes, except for the fact that I can plot them however I want :)!
-  - using *weighted* moving averages
-  - a poll is not (usually) conducted over a single day, but a range
-  - plotting empty space for the future
-  - plotting the popular candidates
-  - I don't like percentages much, I significantly prefer log odds-ratio (more on that later, yes I know I already promised that)
+  * using *weighted* moving averages
+  * a poll is not (usually) conducted over a single day, but a range
+  * plotting empty space for the future
+  * plotting the popular candidates
+  * I don't like percentages much, I significantly prefer log odds-ratio (more on that later, yes I know I already promised that)
 
 The democratic race is a lot easier to play with, at least in terms of number of candidates.
 In addition, I'm going to be bringing up the Clinton-Sanders expectations into play in a second, and this analysis is currently impossible on the Republican side.
@@ -57,6 +44,18 @@ p <- ggplot(d_polldata, aes(x = end_date, y = log(value/(100-value)), color = ch
 p <- p + geom_point(alpha = 0.2)
 p <- p + geom_smooth(span = 0.5, method="loess")
 p
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## Warning: Removed 132 rows containing non-finite values (stat_smooth).
+{% endhighlight %}
+
+
+
+{% highlight text %}
+## Warning: Removed 132 rows containing missing values (geom_point).
 {% endhighlight %}
 
 ![center](/../figs/2016-02-12-playing-with-huffpolster/unnamed-chunk-2-1.png)
