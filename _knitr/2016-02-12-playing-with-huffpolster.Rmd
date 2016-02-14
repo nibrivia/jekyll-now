@@ -22,15 +22,15 @@ length(d_polls$polls[,"id"])
 ```
 
 So now, we can make cool plots, that look just like the ones the Huffington Post makes, except for the fact that I can plot them however I want :)!
-  * using *weighted* moving averages
-  * a poll is not (usually) conducted over a single day, but a range
-  * plotting empty space for the future
-  * plotting the popular candidates
-  * I don't like percentages much, I significantly prefer log odds-ratio (more on that later, yes I know I already promised that)
+* using *weighted* moving averages
+* a poll is not (usually) conducted over a single day, but a range
+* plotting empty space for the future
+* plotting the popular candidates
+* I don't like percentages much, I significantly prefer log odds-ratio (more on that later, yes I know I already promised that)
 
 The democratic race is a lot easier to play with, at least in terms of number of candidates.
 In addition, I'm going to be bringing up the Clinton-Sanders expectations into play in a second, and this analysis is currently impossible on the Republican side.
-```{r}
+```{r, warnings=FALSE}
 d_candidates <- c("Clinton", "Sanders", "Biden", "O'Malley")
 d_questions <- subset(d_polls[["questions"]], question == "2016 National Democratic Primary" & choice %in% d_candidates & value > 0)
 d_polldata <- merge(d_polls$polls, d_questions, by = "id")
