@@ -20,13 +20,13 @@ It boils down to `white*liberal`.
 Unfortunately, they only charted 38 of 50 states, which makes it hard to do a national analysis.
 This means I still have to do the number crunching...
 
-This is not that bad however: great librairies allow the analysis of US Census Bureau data and the liberal-ness of a state can be measured from 2012 election results.
+This is not that bad however: great libraries allow the analysis of US Census Bureau data and the liberal-ness of a state can be measured from 2012 election results.
 These data slightly disagree with the FiveThirtyEight results, but I think it is close enough not to significantly matter.
 At the end of my analysis, I will compare my results to both FiveThirtyEights (hopefully nearly identical) and the Cook's.
 
 Why is this a good idea?
 Exit polls confirm that the more white and the more liberal groups are a Sanders-supportive group.
-It is dubious that the two variables are indenpendent, allowing us to multiply them to get the amount of white liberals exactly.
+It is dubious that the two variables are independent, allowing us to multiply them to get the amount of white liberals exactly.
 In practice, this is probably good enough of an estimate.
 
 **A note on estimates**
@@ -56,7 +56,7 @@ state_demographics$white_fraction <- state_demographics$percent_white/100
 head(state_demographics[c("region", "white_fraction")])
 ```
 
-These are going stay as fractions and not beccome log odds ratios quite yet, they need to be multiplied by the fraction liberals first.
+These are going stay as fractions and not become log odds ratios quite yet, they need to be multiplied by the fraction liberals first.
 
 Liberal data
 ---
@@ -71,7 +71,7 @@ But first a few questions:
 
 Regardless, I doubt these differences matter, just like the wind for the blind-folded archer.
 
-It is surprisingly hard to find a state level dataset for the 2012 election.
+It is surprisingly hard to find a state level data set for the 2012 election.
 I could find a few county-level ones, before finding an [Excel spreadsheet published by Brookings](http://www.brookings.edu/research/interactives/house-partisanship-2012).
 I spotted Vermont as being flipped and did a cursory check for the rest, let me know if you find any more errors?
 The third sheet (Presidential election) was then exported to a csv file.
@@ -145,7 +145,7 @@ Instead, I'll make my computer brute force the solution.
 I'm going to define a function `num_delegates(lors)` and slowly shift up the LORs until it reaches half the delegates: 1,976.
 The prettiest way to do this is to plot it and find the x-intercept (or rather, let the computer do that for us).
 More efficiently, I'm going to use the [bisection method](https://en.wikipedia.org/wiki/Bisection_method).
-This is going to be more than precise enough (arbitrarely so, in fact), it would be like the archer worrying about humididty.
+This is going to be more than precise enough (arbitrarily so, in fact), it would be like the archer worrying about humidity.
 
 Let's go!
 
