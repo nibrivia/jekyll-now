@@ -26,7 +26,7 @@ The more positive the number, the more the state is in support of Clinton and vi
 A +/-1 is about one standard deviation off, which is 27 or 73%.
 Regardless of who "won" the state, above the diagonal means Clinton is exceeding expecations, below Sanders is.
 
-```{r}
+```{r, fig.width=11}
 plot <- ggplot(delegates, aes(x = log(Clinton_expect/Sanders_expect), y = log(Clinton_percentage/Sanders_percentage),
                               fill = log(Clinton_expect/Sanders_expect) - log(Clinton_percentage/Sanders_percentage))) +
   #geom_text( aes(label=State), hjust = 0, vjust = 0 ) +

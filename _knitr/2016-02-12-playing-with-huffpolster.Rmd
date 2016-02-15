@@ -31,7 +31,7 @@ So now, we can make cool plots, that look just like the ones the Huffington Post
 
 The democratic race is a lot easier to play with, at least in terms of number of candidates.
 In addition, I'm going to be bringing up the Clinton-Sanders expectations into play in a second, and this analysis is currently impossible on the Republican side.
-```{r, warning=FALSE}
+```{r, warning=FALSE, fig.width=11}
 d_candidates <- c("Clinton", "Sanders", "Biden", "O'Malley")
 d_questions <- subset(d_polls[["questions"]], question == "2016 National Democratic Primary" & choice %in% d_candidates & value > 0)
 d_polldata <- merge(d_polls$polls, d_questions, by = "id")
@@ -61,14 +61,14 @@ p <- p + geom_point(alpha = 0.2)
 p <- p + geom_smooth(span = 0.5, method="loess")
 ```
 
-```{r, warning=FALSE}
+```{r, warning=FALSE, fig.width=11}
 results <- data.frame(state = c("Iowa", "Iowa", "New Hampshire", "New Hampshire"),
                       date = as.Date(c("2016-02-01", "2016-02-01", "2016-02-09", "2016-02-09")),
                       choice = c("Clinton", "Sanders", "Clinton", "Sanders"),
-                      value = c(49.86, 49.57, 37.95, 60.4),
-                      expect = 100*c(13/44, 31/44, 9/24, 15/24))
-p_states <- p + geom_point(data = results, aes(x=date, y = log(value/expect), color = choice, label=state), shape=18, size=5, alpha=0.7)
-p_states <- p_states + geom_text(data = results, mapping=aes(x=date, y = log(value/expect), color = choice, label=state), hjust=-0.2)
+                      value = log(c(49.86/49.57, 49.57/49.86, 37.95/60.4, 60.4/37.95)),
+                      expect = log(c(13/31, 31/13, 9/15, 15/9)))
+p_states <- p + geom_point(data = results, aes(x=date, y = value-expect, color = choice, label=state), shape=18, size=5, alpha=0.7)
+p_states <- p_states + geom_text(data = results, mapping=aes(x=date, y = value-expect, color = choice, label=state), hjust=-0.2)
 p_states
 ```
 

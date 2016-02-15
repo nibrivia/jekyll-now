@@ -65,10 +65,10 @@ To adjust, because we're in log-odds ratio space, we're simply going to take the
 results <- data.frame(state = c("Iowa", "Iowa", "New Hampshire", "New Hampshire"),
                       date = as.Date(c("2016-02-01", "2016-02-01", "2016-02-09", "2016-02-09")),
                       choice = c("Clinton", "Sanders", "Clinton", "Sanders"),
-                      value = c(49.86, 49.57, 37.95, 60.4),
-                      expect = 100*c(13/44, 31/44, 9/24, 15/24))
-p_states <- p + geom_point(data = results, aes(x=date, y = log(value/expect), color = choice, label=state), shape=18, size=5, alpha=0.7)
-p_states <- p_states + geom_text(data = results, mapping=aes(x=date, y = log(value/expect), color = choice, label=state), hjust=-0.2)
+                      value = log(c(49.86/49.57, 49.57/49.86, 37.95/60.4, 60.4/37.95)),
+                      expect = log(c(13/31, 31/13, 9/15, 15/9)))
+p_states <- p + geom_point(data = results, aes(x=date, y = value-expect, color = choice, label=state), shape=18, size=5, alpha=0.7)
+p_states <- p_states + geom_text(data = results, mapping=aes(x=date, y = value-expect, color = choice, label=state), hjust=-0.2)
 p_states
 {% endhighlight %}
 

@@ -19,7 +19,7 @@ In particular, how would it compare to these changes:
 
 I find the extremes to be a lot more impressive than the ones near the median, simply because the population which does graduate (or not) got multiplied by a larger factor.
 
-```{r}
+```{r, fig.width=11}
 dates <- as.Date(c("2009-01-01", "2016-01-01"))
 rates_label <- c("Real", "Half", "High", "Low", "Extra High")
 rates <- c(75, 80, 45, 55, 94, 99, 1, 6, 99.9, 99.9999)
@@ -44,7 +44,7 @@ However, fractions are hard to compare, so we compute the values and compare the
 For context, 0% is an OR of 0, 50% is an OR of 1 and 100% goes to infinity.
 Here are some plots:
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, fig.width=11}
 ggplot(graduation_rates, aes(x=dates, y=rates/(100-rates), color=label)) + geom_line()
 ggplot(graduation_rates, aes(x=dates, y=rates/(100-rates), color=label)) + geom_line() + ylim(-1, 100)
 ggplot(graduation_rates, aes(x=dates, y=rates/(100-rates), color=label)) + geom_line() + ylim(-1,5)
@@ -61,7 +61,7 @@ We now have symmetry: `log(a/b)=-log(b/a)`, this means that if `LOR(50+a)=x`, th
 Again for context: 0% is -infinty, 50% is 0 and 100% is +infinity.
 Plots!
 
-```{r}
+```{r, fig.width=11}
 ggplot(graduation_rates, aes(x=dates, y=log(rates/(100-rates)), color=label)) +
   geom_line()
 ```
