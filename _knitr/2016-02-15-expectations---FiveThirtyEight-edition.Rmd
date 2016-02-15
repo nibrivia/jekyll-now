@@ -29,14 +29,16 @@ Exit polls confirm that the more white and the more liberal groups are a Sanders
 It is dubious that the two variables are indenpendent, allowing us to multiply them to get the amount of white liberals exactly.
 In practice, this is probably good enough of an estimate.
 
-###A note on estimates
+**A note on estimates**
+
 Throughout this post, I will be doing a lot of "good enough" analysis, and not pushing it as far as I could.
 Some of it is due to a lack of time, knowledge and resources.
 But most of it comes from the fact that this estimate is inherently very hand-wavy.
 Trying to estimate down to the percent point (or .05 log odd ratio around the median) how many liberals there are, or how turnout affect racial groups differently, is trying to add precision where there is none to be gained.
 Think of it like trying to shoot an arrow blind-folded, but trying to calculate how the wind will affect the trajectory: it's an interesting, but pointless, exercise.
 
-##Census data
+Census data
+---
 
 The census data was obtained following the method described by [Ari Lamstein](http://www.arilamstein.com/blog/2015/09/07/new-lesson-mapping-historic-census-data-in-r/).
 A huge thank you for providing surprisingly easy instructions to follow.
@@ -56,7 +58,8 @@ head(state_demographics[c("region", "white_fraction")])
 
 These are going stay as fractions and not beccome log odds ratios quite yet, they need to be multiplied by the fraction liberals first.
 
-##Liberal data
+Liberal data
+---
 
 Now, onto the political dimension!
 But first a few questions:
@@ -78,7 +81,8 @@ pres12_results <- read.csv("2012-presidential-results-state.csv")
 pres12_results$liberal_fraction <- pres12_results$Obama.Vote.2012/100
 ```
 
-##Multiply and conquer
+Multiply and conquer
+---
 
 Now, the long awaited multiplication.
 
@@ -107,7 +111,8 @@ ggplot(dem_primary, aes(x=sanders_score, y=FiveThirtyEight_scores/100)) +
 Great, we're done!
 Or not, we have an indicator of friendliness, but not expectations.
 
-##Expectations: unexpectedly hard
+Expectations: unexpectedly hard
+---
 
 So expectations are how well we would expect the candidates to be doing if they were as popular (nationally) as each other.
 The percentages we have therefore need to somehow be centered around 50%.
@@ -200,7 +205,8 @@ Not surprisingly, the Cook Report and I vaguely agree (along the diagonal), but 
 This is probably due to many different things, the most important of which might be how I measure liberals.
 The second is that I am using log-odds ratio, which they probably didn't.
 
-##Future updates
+Future updates
+---
 
 Within the next week, I will copy both the expectations and the national polls posts into their own, regularly updated pages.
 On those pages, I will keep using the Cook Report's, these estimates and any future ones I may produce.
@@ -217,7 +223,8 @@ expectations <- data.frame(state = dem_primary$State,
 write.csv(expectations, "2012-dem-primary-expectations.csv")
 ```
 
-##Further research
+Further research
+---
 
 I hope to always include (and will retro-actively) a further questions section to these posts.
 
