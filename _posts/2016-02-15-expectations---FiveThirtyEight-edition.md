@@ -325,4 +325,3 @@ I hope to always include (and will retro-actively) a further questions section t
 
 - This is not the first two-candidate primary, there is a lot of historical data to be mined, with the same analysis
 - Age and income have been noticed as large dividers in the race, would they yield better expectations?
-- I am not satisfied with the "weighted normalization" method, specifically, I don't like that there is a possibility of expected delegates exceeding the state's total. I think I am missing something obvious in a problem that feels very log odd ratio-y.
