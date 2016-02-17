@@ -1,0 +1,43 @@
+---
+layout: page
+title: "Playing around with HuffPollster data"
+author: "Olivia Brode-Roger"
+date: "February 16, 2016"
+permalink : /polls/
+---
+
+```{r setup, include=FALSE}
+library(ggplot2)
+library(pollstR)
+```
+
+```{r, echo=FALSE, warning=FALSE, fig.width=11}
+d_polls <- pollstr_polls(topic = "2016-president-dem-primary", state = "US", after="2016-01-01", max_pages=500)
+d_candidates <- c("Clinton", "Sanders")
+d_questions <- subset(d_polls[["questions"]], question == "2016 National Democratic Primary" & choice %in% d_candidates & value > 0)
+d_polldata <- merge(d_polls$polls, d_questions, by = "id")
+
+p <- ggplot(d_polldata, aes(x = end_date, y = log(value/(100-value)), color = choice)) + xlim(as.Date(c("2016-01-01", "2016-11-05"))) + ylim(c(-1,1))
+p <- p + geom_point(alpha = 0.2)
+p <- p + geom_smooth(span = 0.5, method="loess")
+
+results <- data.frame(state = c("Iowa", "Iowa", "New Hampshire", "New Hampshire"),
+                      date = as.Date(c("2016-02-01", "2016-02-01", "2016-02-09", "2016-02-09")),
+                      choice = c("Clinton", "Sanders", "Clinton", "Sanders"),
+                      value = log(c(49.86/49.57, 49.57/49.86, 37.95/60.4, 60.4/37.95)),
+                      target = log(c(13/31, 31/13, 9/15, 15/9)))
+p_states <- p +
+  #geom_point(data = results, aes(x=date, y = value-target, color = choice, label=state), shape=18, size=5, alpha=0.7) +
+  geom_text(data = results, mapping=aes(x=date, y = value-target, color = choice, label=state.abb[match(state, state.name)]))
+p_states
+```
+
+This chart seeks to satisfy some of my more particular desires in charts, as well as add a bit of information.
+I am only using the democratic primary race, due to a target analysis that is *significantly* easier to run in a 2-person race.
+
+- better moving average (with std error!)
+- plotting empty space for the future
+- I don't like percentages much, I significantly prefer [log odds-ratio]({% post_url 2016-02-13-why-I-prefer-log-odds-ratio %})
+- plotting the state results after using [targets to correct them for bias]({% post_url 2016-02-12-playing-with-huffpolster %}).
+
+This doesn't tell us much (yet!), but these new points probably tell us something about how the rest of the country is going to vote, assuming nothing changes.

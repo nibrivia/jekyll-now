@@ -1,0 +1,32 @@
+---
+layout: page
+title: "Target tracking"
+author: "Olivia Brode-Roger"
+date: "February 16, 2016"
+permalink : /targets/
+---
+
+```{r setup, include=FALSE}
+require(ggplot2)
+```
+
+An explanation for these plot can be found with [my first blog post]({% post_url 2016-02-10-targets-v-results %}).
+Essentially, states above the diagonal are where Clinton exceeded targets, below Sanders is exceeding target.
+Arbitrarely, positive indicates "Clinton-ness", 0 is neutral and negative is "Sanders-ness".
+
+The targets used are from the [Cook Political Report, Jan 21](http://cookpolitical.com/story/9179).
+More to come soon!
+
+```{r, echo=FALSE, fig.width=11}
+delegates <- data.frame(State = c("Iowa", "New Hampshire"),
+                        Clinton_percentage=c(49.86, 37.95), Sanders_percentage=c(49.57, 60.4),
+                        Clinton_target=c(13, 9), Sanders_target=c(31, 15))
+
+plot <- ggplot(delegates, aes(x = log(Clinton_target/Sanders_target), y = log(Clinton_percentage/Sanders_percentage)) ) +
+  geom_text( aes(label=state.abb[match(State, state.name)])) +
+  scale_size_continuous(range = c(2,7), limits = c(14,475)) +
+  labs(title = "CPR Jan 21 Targets v Results", x = "CPR Jan 21 Targets", y = "Results", size = "Total delegates") +
+  geom_abline(intercept = 0, slope=1, alpha = 0.5) +
+  xlim(-1,1) + ylim(-1,1)
+plot
+```

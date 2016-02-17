@@ -1,16 +1,13 @@
 ---
 layout: post
-title: "Expectations - FiveThirtyEight edition"
+title: "Targets - FiveThirtyEight edition"
 author: "Olivia Brode-Roger"
 date: "February 15, 2016"
 ---
 
 
 
-I have started to trust the expectations from the [Cook Political Report](http://cookpolitical.com/story/9179) less and less.
-First of all, the line for DC is all kinds of silly, which makes me doubt how they generated it.
-Secondly, New Hampshire has generally been regarded as friendlier to Sanders than Iowa, but they have it the other way around, resulting in [weird analysis]({% post_url 2016-02-12-playing-with-huffpolster %}).
-For these reasons, I've wanted to move away from using their analysis, and do my own.
+For a variety of reasons, I've wanted to move away from using the [Cook's analysis](http://cookpolitical.com/story/9179), and do my own.
 
 Unfortunately, doing my own analysis requires a lot of time and data, both of which I lack.
 However, [FiveThirtyEight has a quick and dirty solution](http://fivethirtyeight.com/features/what-happens-if-bernie-sanders-wins-iowa/) that I wanted to try out.
@@ -119,31 +116,29 @@ head(sanders_scores)
 {% endhighlight %}
 
 For comparison, here's FiveThirtyEights predictions.
-(The csv file contains the Cook's expectations, the popular vote and the date of the primary/caucus)
 
 
 {% highlight r %}
+# The csv file contains the Cook's targets, the popular vote and the date of the primary/caucus
 dem_primary <- read.csv("2016-dem-primary.csv")
 dem_primary$sanders_score <- sanders_scores$score
 
 ggplot(dem_primary, aes(x=sanders_score, y=FiveThirtyEight_scores/100)) +
-  geom_point() +
+  #geom_point() +
   geom_abline(intercept = 0, slope=1, alpha = 0.5) +
   geom_smooth(method = "lm") +
-  geom_text(data=subset(dem_primary, abs(sanders_score - FiveThirtyEight_scores/100) > 0.05),
-            aes(label = State), vjust=1) +
-  coord_fixed()
+  geom_text(aes(label = state.abb[match(State, state.name)]), size = 3)
 {% endhighlight %}
 
-![center](/../figs/2016-02-15-expectations---FiveThirtyEight-edition/unnamed-chunk-5-1.png)
+![center](/../figs/2016-02-15-targets---FiveThirtyEight-edition/unnamed-chunk-5-1.png)
 
 Great, we're done!
-Or not, we have an indicator of friendliness, but not expectations.
+Or not, we have an indicator of friendliness, but not targets.
 
-Expectations: unexpectedly hard
+Targets: unexpectedly hard
 ---
 
-So expectations are how well we would expect the candidates to be doing if they were as popular (nationally) as each other.
+So targets are how well we would expect the candidates to be doing if they were as popular (nationally) as each other.
 The percentages we have therefore need to somehow be centered around 50%.
 Anytime we're shifting percentages around, something should immediately come to mind: log odds ratios.
 Except, there's more to the story.
@@ -154,7 +149,7 @@ This is a bit tricky, simply shifting the LORs until they are centered at 0 does
 Before going further ahead, another concern needs to be addressed: the states.
 
 In this case, size matters, a lot.
-That was not obvious at first, but a slight change in the expectation for California's 475 delegates is worth more than a similar one in Vermont's 16 (after Wyoming's 14, it's tied with Alaska for second place).
+That was not obvious at first, but a slight change in the target for California's 475 delegates is worth more than a similar one in Vermont's 16 (after Wyoming's 14, it's tied with Alaska for second place).
 Next, states allocate delegates differently, winner takes all being particularly annoying.
 However, in terms of popularity measures, the aptly-named popular vote beats everything else, including delegate count.
 
@@ -169,7 +164,7 @@ dem_primary[dem_primary$State == "District of Columbia", "total_delegates"] <- 2
 {% endhighlight %}
 
 Now, to the tricky part.
-Because I'm lazy, I'm not going to try to solve for the expectations in each state.
+Because I'm lazy, I'm not going to try to solve for the targets in each state.
 Instead, I'll make my computer brute force the solution.
 
 I'm going to define a function `num_delegates(lors)` and slowly shift up the LORs until it reaches half the delegates: 1,976.
@@ -224,17 +219,17 @@ Now we can compute the actual scores, and compare them with the Cook's report.
 
 
 {% highlight r %}
-dem_primary$my_Sanders_expect <- sanders_scores$Sanders_LOR + sanders_shift
-dem_primary$my_Clinton_expect <- -dem_primary$my_Sanders_expect
+dem_primary$my_Sanders_target <- sanders_scores$Sanders_LOR + sanders_shift
+dem_primary$my_Clinton_target <- -dem_primary$my_Sanders_target
 dem_primary$CPR_Sanders_LOR <-
   log(dem_primary$CPR_Sanders_Expected_delegates/dem_primary$CPR_Clinton_Expected_delegates)
-dem_primary[c("State", "my_Sanders_expect", "CPR_Sanders_LOR")]
+dem_primary[c("State", "my_Sanders_target", "CPR_Sanders_LOR")]
 {% endhighlight %}
 
 
 
 {% highlight text %}
-##                   State my_Sanders_expect CPR_Sanders_LOR
+##                   State my_Sanders_target CPR_Sanders_LOR
 ## 1               Alabama      -0.318109556     -0.34294475
 ## 2                Alaska      -0.295016523      0.25131443
 ## 3               Arizona      -0.344502696     -0.02666825
@@ -291,16 +286,13 @@ dem_primary[c("State", "my_Sanders_expect", "CPR_Sanders_LOR")]
 
 
 {% highlight r %}
-ggplot(dem_primary, aes(x=my_Sanders_expect, y=CPR_Sanders_LOR)) +
-  geom_point(aes(), shape=21) +
+ggplot(dem_primary, aes(x=my_Sanders_target, y=CPR_Sanders_LOR)) +
   geom_abline(intercept = 0, slope=1, alpha = 0.5) +
   geom_smooth(method = "lm") +
-  geom_text(data=subset(dem_primary, abs(my_Sanders_expect- CPR_Sanders_LOR) > 0.35),
-            aes(label = State), vjust=-1) +
-  coord_fixed()
+  geom_text(aes(label = state.abb[match(State, state.name)]), size = 3)
 {% endhighlight %}
 
-![center](/../figs/2016-02-15-expectations---FiveThirtyEight-edition/unnamed-chunk-8-1.png)
+![center](/../figs/2016-02-15-targets---FiveThirtyEight-edition/unnamed-chunk-8-1.png)
 
 Not surprisingly, the Cook Report and I vaguely agree (along the diagonal), but some states are fairly off.
 This is probably due to many different things, the most important of which might be how I measure liberals.
@@ -309,7 +301,7 @@ The second is that I am using log-odds ratio, which they probably didn't.
 Future updates
 ---
 
-Within the next week, I will copy both the expectations and the national polls posts into their own, regularly updated pages.
+Within the next week, I will copy both the targets and the national polls posts into their own, regularly updated pages.
 On those pages, I will keep using the Cook Report's, these estimates and any future ones I may produce.
 At the end of the primary, I hope to have some meaningful conclusions about this process.
 I will update the pages with what conclusions I will draw depending on what results we get.
@@ -317,12 +309,12 @@ I will update the pages with what conclusions I will draw depending on what resu
 
 {% highlight r %}
 #Save our work!
-expectations <- data.frame(state = dem_primary$State,
-                           my_Sanders_expect = dem_primary$my_Sanders_expect,
-                           my_Clinton_expect = dem_primary$my_Clinton_expect,
-                           CPR_Sanders_expect = dem_primary$CPR_Sanders_LOR,
-                           CPR_Clinton_expect = -dem_primary$CPR_Sanders_LOR)
-write.csv(expectations, "2012-dem-primary-expectations.csv")
+targets <- data.frame(state = dem_primary$State,
+                           my_Sanders_target = dem_primary$my_Sanders_target,
+                           my_Clinton_target = dem_primary$my_Clinton_target,
+                           CPR_Sanders_target = dem_primary$CPR_Sanders_LOR,
+                           CPR_Clinton_target = -dem_primary$CPR_Sanders_LOR)
+write.csv(targets, "2016-dem-primary-targets.csv")
 {% endhighlight %}
 
 Further research
@@ -331,4 +323,4 @@ Further research
 I hope to always include (and will retro-actively) a further questions section to these posts.
 
 - This is not the first two-candidate primary, there is a lot of historical data to be mined, with the same analysis
-- Age and income have been noticed as large dividers in the race, would they yield better expectations?
+- Age and income have been noticed as large dividers in the race, would they yield better targets?
