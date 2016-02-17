@@ -314,7 +314,7 @@ targets <- data.frame(state = dem_primary$State,
                            my_Clinton_target = dem_primary$my_Clinton_target,
                            CPR_Sanders_target = dem_primary$CPR_Sanders_LOR,
                            CPR_Clinton_target = -dem_primary$CPR_Sanders_LOR)
-write.csv(targets, "2016-dem-primary-targets.csv")
+write.csv(targets, "2016-dem-primary-targets.csv", row.names = FALSE)
 {% endhighlight %}
 
 Further research
