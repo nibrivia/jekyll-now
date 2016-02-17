@@ -16,7 +16,7 @@ Essentially, states above the diagonal are where Clinton exceeded targets, below
 Arbitrarely, positive indicates "Clinton-ness", 0 is neutral and negative is "Sanders-ness".
 
 ```{r, echo=FALSE, fig.width=11, warning=FALSE}
-targets <- read.csv("2016-dem-primary-targets.csv")
+targets <- read.csv("2016-dem-primary-targets-manual.csv")
 results <- read.csv("2016-dem-primary.csv")
 
 targets$state_abb <- state.abb[match(targets$state, state.name)]

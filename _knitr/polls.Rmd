@@ -22,7 +22,7 @@ p <- ggplot(d_polldata, aes(x = end_date, y = log(value/(100-value)), color = ch
 p <- p + geom_point(alpha = 0.2)
 p <- p + geom_smooth(span = 0.5, method="loess")
 
-targets <- read.csv("2016-dem-primary-targets.csv")
+targets <- read.csv("2016-dem-primary-targets-manual.csv")
 results <- read.csv("2016-dem-primary.csv")
 
 targets$state_abb <- state.abb[match(targets$state, state.name)]
@@ -31,10 +31,10 @@ targets$date <- as.Date(results$Date)
 state_clinton_targets <- melt(targets, id.vars = c("state", "state_abb", "date", "result"))
 
 p_states <- p +
-  geom_text(data = state_clinton_targets, mapping=aes(x=date, y = result-value, color = variable, label=state_abb), size=5) +
-  geom_line(data = state_clinton_targets, mapping=aes(x=date, y = result-value, color = variable, label=state_abb), alpha = 0.5) +
-  geom_text(data = state_clinton_targets, mapping=aes(x=date, y = value-result, color = variable, label=state_abb), size=5) +
-  geom_line(data = state_clinton_targets, mapping=aes(x=date, y = value-result, color = variable, label=state_abb), alpha = 0.5) +
+  geom_point(data = state_clinton_targets, mapping=aes(x=date, y = result-value, color = variable), size=3) +
+  geom_line(data = state_clinton_targets, mapping=aes(x=date, y = result-value, color = variable), alpha = 0.8) +
+  geom_point(data = state_clinton_targets, mapping=aes(x=date, y = value-result, color = variable), size=3) +
+  geom_line(data = state_clinton_targets, mapping=aes(x=date, y = value-result, color = variable), alpha = 0.8) +
   theme(text = element_text(size=20))
 p_states
 ```
