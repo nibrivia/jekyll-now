@@ -8,27 +8,39 @@ permalink : /polls/
 
 ```{r setup, include=FALSE}
 library(ggplot2)
+library(reshape2)
 library(pollstR)
 ```
 
-```{r, echo=FALSE, warning=FALSE, fig.width=11}
+```{r, echo=FALSE, warning=FALSE, fig.width=17, fig.height=10}
 d_polls <- pollstr_polls(topic = "2016-president-dem-primary", state = "US", after="2016-01-01", max_pages=500)
 d_candidates <- c("Clinton", "Sanders")
 d_questions <- subset(d_polls[["questions"]], question == "2016 National Democratic Primary" & choice %in% d_candidates & value > 0)
 d_polldata <- merge(d_polls$polls, d_questions, by = "id")
 
-p <- ggplot(d_polldata, aes(x = end_date, y = log(value/(100-value)), color = choice)) + xlim(as.Date(c("2016-01-01", "2016-11-05"))) + ylim(c(-1,1))
+p <- ggplot(d_polldata, aes(x = end_date, y = log(value/(100-value)), color = choice)) + xlim(as.Date(c("2016-01-01", "2016-11-05")))
 p <- p + geom_point(alpha = 0.2)
 p <- p + geom_smooth(span = 0.5, method="loess")
 
-results <- data.frame(state = c("Iowa", "Iowa", "New Hampshire", "New Hampshire"),
-                      date = as.Date(c("2016-02-01", "2016-02-01", "2016-02-09", "2016-02-09")),
-                      choice = c("Clinton", "Sanders", "Clinton", "Sanders"),
-                      value = log(c(49.86/49.57, 49.57/49.86, 37.95/60.4, 60.4/37.95)),
-                      target = log(c(13/31, 31/13, 9/15, 15/9)))
+targets <- read.csv("2016-dem-primary-targets.csv")
+results <- read.csv("2016-dem-primary.csv")
+
+state_targets <- data.frame(state = state.abb[match(targets$state, state.name)],
+                     date = as.Date(results$Date),
+                     CPR_Jan21 = targets$CPR_Clinton_target,
+                     Olivia = targets$my_Clinton_target,
+                     result = log(results$Clinton_popular_vote/results$Sanders_popular_vote))
+state_clinton_targets <- melt(state_targets, id.vars = c("state", "date", "result"))
+state_sanders_targets <- state_clinton_targets
+state_sanders_targets$result <- -1*state_sanders_targets$result
+state_sanders_targets$value <- -1*state_sanders_targets$value
+
 p_states <- p +
-  #geom_point(data = results, aes(x=date, y = value-target, color = choice, label=state), shape=18, size=5, alpha=0.7) +
-  geom_text(data = results, mapping=aes(x=date, y = value-target, color = choice, label=state.abb[match(state, state.name)]))
+  geom_text(data = state_clinton_targets, mapping=aes(x=date, y = result-value, color = variable, label=state), size=5) +
+  geom_line(data = state_clinton_targets, mapping=aes(x=date, y = result-value, color = variable, label=state), alpha = 0.5) +
+  geom_text(data = state_sanders_targets, mapping=aes(x=date, y = result-value, color = variable, label=state), size=5) +
+  geom_line(data = state_sanders_targets, mapping=aes(x=date, y = result-value, color = variable, label=state), alpha = 0.5) +
+  theme(text = element_text(size=20))
 p_states
 ```
 
