@@ -25,21 +25,16 @@ p <- p + geom_smooth(span = 0.5, method="loess")
 targets <- read.csv("2016-dem-primary-targets.csv")
 results <- read.csv("2016-dem-primary.csv")
 
-state_targets <- data.frame(state = state.abb[match(targets$state, state.name)],
-                     date = as.Date(results$Date),
-                     CPR_Jan21 = targets$CPR_Clinton_target,
-                     Olivia = targets$my_Clinton_target,
-                     result = log(results$Clinton_popular_vote/results$Sanders_popular_vote))
-state_clinton_targets <- melt(state_targets, id.vars = c("state", "date", "result"))
-state_sanders_targets <- state_clinton_targets
-state_sanders_targets$result <- -1*state_sanders_targets$result
-state_sanders_targets$value <- -1*state_sanders_targets$value
+targets$state_abb <- state.abb[match(targets$state, state.name)]
+targets$result <- log(results$Clinton_popular_vote/results$Sanders_popular_vote)
+targets$date <- as.Date(results$Date)
+state_clinton_targets <- melt(targets, id.vars = c("state", "state_abb", "date", "result"))
 
 p_states <- p +
-  geom_text(data = state_clinton_targets, mapping=aes(x=date, y = result-value, color = variable, label=state), size=5) +
-  geom_line(data = state_clinton_targets, mapping=aes(x=date, y = result-value, color = variable, label=state), alpha = 0.5) +
-  geom_text(data = state_sanders_targets, mapping=aes(x=date, y = result-value, color = variable, label=state), size=5) +
-  geom_line(data = state_sanders_targets, mapping=aes(x=date, y = result-value, color = variable, label=state), alpha = 0.5) +
+  geom_text(data = state_clinton_targets, mapping=aes(x=date, y = result-value, color = variable, label=state_abb), size=5) +
+  geom_line(data = state_clinton_targets, mapping=aes(x=date, y = result-value, color = variable, label=state_abb), alpha = 0.5) +
+  geom_text(data = state_clinton_targets, mapping=aes(x=date, y = value-result, color = variable, label=state_abb), size=5) +
+  geom_line(data = state_clinton_targets, mapping=aes(x=date, y = value-result, color = variable, label=state_abb), alpha = 0.5) +
   theme(text = element_text(size=20))
 p_states
 ```

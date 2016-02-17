@@ -208,10 +208,8 @@ I will update the pages with what conclusions I will draw depending on what resu
 ```{r}
 #Save our work!
 targets <- data.frame(state = dem_primary$State,
-                           my_Sanders_target = dem_primary$my_Sanders_target,
-                           my_Clinton_target = dem_primary$my_Clinton_target,
-                           CPR_Sanders_target = dem_primary$CPR_Sanders_LOR,
-                           CPR_Clinton_target = -dem_primary$CPR_Sanders_LOR)
+                           my_target = dem_primary$my_Clinton_target,
+                           CPR_target = -dem_primary$CPR_Sanders_LOR)
 write.csv(targets, "2016-dem-primary-targets.csv", row.names = FALSE)
 ```
 

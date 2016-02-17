@@ -19,14 +19,12 @@ Arbitrarely, positive indicates "Clinton-ness", 0 is neutral and negative is "Sa
 targets <- read.csv("2016-dem-primary-targets.csv")
 results <- read.csv("2016-dem-primary.csv")
 
-state_targets <- data.frame(state = state.abb[match(targets$state, state.name)],
-                     CPR_Jan21 = targets$CPR_Clinton_target,
-                     Olivia = targets$my_Clinton_target,
-                     result = log(results$Clinton_popular_vote/results$Sanders_popular_vote))
-state_targets <- melt(state_targets, id.vars = c("state", "result"))
+targets$state_abb <- state.abb[match(targets$state, state.name)]
+targets$result <- log(results$Clinton_popular_vote/results$Sanders_popular_vote)
+state_targets <- melt(targets, id.vars = c("state", "state_abb", "result"))
 
 plot <- ggplot(state_targets, aes(x = value, y = result, color=variable) ) +
-  geom_text( aes(label=state) ) +
+  geom_text( aes(label=state_abb) ) +
   #scale_size_continuous(range = c(2,7), limits = c(14,475)) +
   labs(title = "Various Targets v Results", x = "Targets", y = "Results", size = "Total delegates") +
   geom_abline(intercept = 0, slope=1, alpha = 0.5) +
