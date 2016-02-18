@@ -17,5 +17,6 @@ Arbitrarely, positive indicates "Clinton-ness", 0 is neutral and negative is "Sa
 The targets used are:
 
 - [Cook Political Report, Jan 21](http://cookpolitical.com/story/9179).
+- [Cook Political Report, Feb 12](http://cookpolitical.com/story/9258).
 - [my first attempt]({% post_url 2016-02-15-targets---FiveThirtyEight-edition %}) (`white*2012 Democratic vote share`)
-- more to come soon!
+- [FiveThirtyEight's targets](http://fivethirtyeight.com/features/bernie-sanderss-path-to-the-nomination/) (`white*2012 Democratic vote share`)
