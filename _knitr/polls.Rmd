@@ -26,15 +26,17 @@ targets <- read.csv("2016-dem-primary-targets-manual.csv")
 results <- read.csv("2016-dem-primary.csv")
 
 targets$state_abb <- state.abb[match(targets$state, state.name)]
-targets$result <- log(results$Clinton_popular_vote/results$Sanders_popular_vote)
+targets$clinton_result <- log(results$Clinton_popular_vote/(100-results$Clinton_popular_vote))
+targets$sanders_result <- log(results$Sanders_popular_vote/(100-results$Sanders_popular_vote))
 targets$date <- as.Date(results$Date)
-state_clinton_targets <- melt(targets, id.vars = c("state", "state_abb", "date", "result"))
+state_clinton_targets <- melt(targets, id.vars = c("state", "state_abb", "date", "sanders_result", "clinton_result"))
 
 p_states <- p +
-  geom_point(data = state_clinton_targets, mapping=aes(x=date, y = result-value, color = variable), size=3) +
-  geom_line(data = state_clinton_targets, mapping=aes(x=date, y = result-value, color = variable), alpha = 0.8) +
-  geom_point(data = state_clinton_targets, mapping=aes(x=date, y = value-result, color = variable), size=3) +
-  geom_line(data = state_clinton_targets, mapping=aes(x=date, y = value-result, color = variable), alpha = 0.8) +
+  geom_point(data = state_clinton_targets, mapping=aes(x=date, y = clinton_result-value, color = variable), size=3) +
+  geom_line(data = state_clinton_targets, mapping=aes(x=date, y = clinton_result-value, color = variable), alpha = 0.8) +
+  geom_point(data = state_clinton_targets, mapping=aes(x=date, y = sanders_result+value, color = variable), size=3) +
+  geom_line(data = state_clinton_targets, mapping=aes(x=date, y = sanders_result+value, color = variable), alpha = 0.8) +
+  xlab("Date") + ylab("Polls and result (log odds ratio)") +
   theme(text = element_text(size=20))
 p_states
 ```

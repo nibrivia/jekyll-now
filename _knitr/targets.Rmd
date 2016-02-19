@@ -11,8 +11,7 @@ require(ggplot2)
 require(reshape2)
 ```
 
-An explanation for these plot can be found with [my first blog post]({% post_url 2016-02-10-targets-v-results %}).
-Essentially, states above the diagonal are where Clinton exceeded targets, below Sanders is exceeding target.
+States above the diagonal are where Clinton exceeded targets, below Sanders is exceeding target, more in my (first!) [blog post]({% post_url 2016-02-10-targets-v-results %})
 Arbitrarely, positive indicates "Clinton-ness", 0 is neutral and negative is "Sanders-ness".
 
 ```{r, echo=FALSE, fig.width=11, warning=FALSE}
@@ -23,15 +22,23 @@ targets$state_abb <- state.abb[match(targets$state, state.name)]
 targets$result <- log(results$Clinton_popular_vote/results$Sanders_popular_vote)
 state_targets <- melt(targets, id.vars = c("state", "state_abb", "result"))
 
-plot <- ggplot(state_targets, aes(x = value, y = result, color=variable) ) +
+ggplot(state_targets, aes(x = value, y = result, color=variable) ) +
   geom_text( aes(label=state_abb) ) +
-  #scale_size_continuous(range = c(2,7), limits = c(14,475)) +
   labs(title = "Various Targets v Results", x = "Targets", y = "Results", size = "Total delegates") +
   geom_abline(intercept = 0, slope=1, alpha = 0.5) +
+  theme(text = element_text(size=20)) +
   xlim(-1,1) + ylim(-1,1)
-plot
 ```
 
+Because the distance from the diagonal is what we care about, here's a change of coordinates:
+```{r, echo=FALSE, fig.width=11, warning=FALSE}
+ggplot(state_targets, aes(x = value, y = result-value, color=variable) ) +
+  geom_text( aes(label=state_abb) ) +
+  labs(title = "Various Targets v Diff", x = "Targets", y = "Result-Target") +
+  geom_abline(intercept = 0, slope=0, alpha = 0.5) +
+  theme(text = element_text(size=20)) +
+  xlim(-1,1) + ylim(-1,1)
+```
 The targets used are:
 
 - [Cook Political Report, Jan 21](http://cookpolitical.com/story/9179).

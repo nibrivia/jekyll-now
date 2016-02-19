@@ -8,12 +8,13 @@ permalink : /targets/
 
 
 
-An explanation for these plot can be found with [my first blog post]({% post_url 2016-02-10-targets-v-results %}).
-Essentially, states above the diagonal are where Clinton exceeded targets, below Sanders is exceeding target.
+States above the diagonal are where Clinton exceeded targets, below Sanders is exceeding target, more in my (first!) [blog post]({% post_url 2016-02-10-targets-v-results %})
 Arbitrarely, positive indicates "Clinton-ness", 0 is neutral and negative is "Sanders-ness".
 
 ![center](/../figs/targets/unnamed-chunk-1-1.png)
 
+Because the distance from the diagonal is what we care about, here's a change of coordinates:
+![center](/../figs/targets/unnamed-chunk-2-1.png)
 The targets used are:
 
 - [Cook Political Report, Jan 21](http://cookpolitical.com/story/9179).
