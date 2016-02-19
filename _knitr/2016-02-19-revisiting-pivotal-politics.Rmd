@@ -44,8 +44,8 @@ A support of -0.2 has the same legislator being the "border", but everyone small
 
 In this plot, we only care about majority support, so it looks rather simple.
 ```{r, fig.width=11}
-precision <- 100
-points <- expand.grid(b = 0:precision/precision, s = 0:precision/precision + 0.5/precision)
+precision <- 1000
+points <- expand.grid(b = 0:precision/precision, s = 0:precision/precision + 1/(2*precision))
 points$support <- sign(points$b-points$s)*(points$b + points$s)/2
 points <- mutate(points, majority = (support%%1)<0.5) %>%
   mutate(status = ifelse(majority, "Passes", "Fails"))
