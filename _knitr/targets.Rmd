@@ -27,17 +27,19 @@ ggplot(state_targets, aes(x = value, y = result, color=variable) ) +
   labs(title = "Various Targets v Results", x = "Targets", y = "Results", size = "Total delegates") +
   geom_abline(intercept = 0, slope=1, alpha = 0.5) +
   theme(text = element_text(size=20)) +
-  xlim(-1,1) + ylim(-1,1)
+  xlim(-1,1) + ylim(-1,1) +
+  facet_wrap(~ variable)
 ```
 
 Because the distance from the diagonal is what we care about, here's a change of coordinates:
 ```{r, echo=FALSE, fig.width=11, warning=FALSE}
 ggplot(state_targets, aes(x = value, y = result-value, color=variable) ) +
   geom_text( aes(label=state_abb) ) +
-  labs(title = "Various Targets v Diff", x = "Targets", y = "Result-Target") +
+  labs(title = "Various Targets v Diff", x = "Targets", y = "Bias-corrected result") +
   geom_abline(intercept = 0, slope=0, alpha = 0.5) +
   theme(text = element_text(size=20)) +
-  xlim(-1,1) + ylim(-1,1)
+  xlim(-1,1) + ylim(-1,1) +
+  facet_wrap(~ variable)
 ```
 The targets used are:
 

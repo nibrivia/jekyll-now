@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "Playing around with HuffPollster data"
+title: "Polls and biased-corrected state results"
 author: "Olivia Brode-Roger"
 date: "February 16, 2016"
 permalink : /polls/
@@ -9,33 +9,47 @@ permalink : /polls/
 ```{r setup, include=FALSE}
 library(ggplot2)
 library(reshape2)
+library(dplyr)
 library(pollstR)
 ```
 
 ```{r, echo=FALSE, warning=FALSE, fig.width=17, fig.height=10}
+charts <- pollstr_charts(topic = "2016-president-dem-primary")
 d_polls <- pollstr_polls(topic = "2016-president-dem-primary", state = "US", after="2016-01-01", max_pages=500)
 d_candidates <- c("Clinton", "Sanders")
 d_questions <- subset(d_polls[["questions"]], question == "2016 National Democratic Primary" & choice %in% d_candidates & value > 0)
 d_polldata <- merge(d_polls$polls, d_questions, by = "id")
 
+targets <- read.csv("2016-dem-primary-targets-manual.csv")
+results <- read.csv("2016-dem-primary.csv")
+results <- rename(results, FiveThirtyEight_margins = FiveThirtyEight_target)
+targets <- merge(results, targets, by="state")
+
+targets <- mutate(targets, state_abb = state.abb[match(targets$state, state.name)]) %>%
+  rename(state_name = state) %>%
+  mutate(clinton_result = log(results$Clinton_popular_vote/(100-results$Clinton_popular_vote))) %>%
+  mutate(sanders_result = log(results$Sanders_popular_vote/(100-results$Sanders_popular_vote))) %>%
+  mutate(date = as.Date(results$Date))
+
+targets <- melt(targets, #id.vars = c("state", "date", "sanders_result", "clinton_result"),
+             measure.vars = grep("target", colnames(targets)),
+             value.name = "target",
+             variable.name = "method")
+
+targets <- mutate(targets, Clinton = clinton_result - target) %>%
+  mutate(Sanders = sanders_result + target)
+
+targets <- melt(targets, measure.vars = c("Sanders", "Clinton"),
+                variable.name = "choice",
+                value.name = "Estimate")
+
 p <- ggplot(d_polldata, aes(x = end_date, y = log(value/(100-value)), color = choice)) + xlim(as.Date(c("2016-01-01", "2016-06-15")))
 p <- p + geom_point(alpha = 0.2)
 p <- p + geom_smooth(span = 0.5, method="loess")
 
-targets <- read.csv("2016-dem-primary-targets-manual.csv")
-results <- read.csv("2016-dem-primary.csv")
-
-targets$state_abb <- state.abb[match(targets$state, state.name)]
-targets$clinton_result <- log(results$Clinton_popular_vote/(100-results$Clinton_popular_vote))
-targets$sanders_result <- log(results$Sanders_popular_vote/(100-results$Sanders_popular_vote))
-targets$date <- as.Date(results$Date)
-state_clinton_targets <- melt(targets, id.vars = c("state", "state_abb", "date", "sanders_result", "clinton_result"))
-
 p_states <- p +
-  geom_point(data = state_clinton_targets, mapping=aes(x=date, y = clinton_result-value, color = variable), size=3) +
-  geom_line(data = state_clinton_targets, mapping=aes(x=date, y = clinton_result-value, color = variable), alpha = 0.8) +
-  geom_point(data = state_clinton_targets, mapping=aes(x=date, y = sanders_result+value, color = variable), size=3) +
-  geom_line(data = state_clinton_targets, mapping=aes(x=date, y = sanders_result+value, color = variable), alpha = 0.8) +
+  geom_point(data = targets, mapping=aes(x=date, y = Estimate, fill = choice, color = method), size=2) +
+  geom_line(data = targets, mapping=aes(x=date, y = Estimate, fill = choice, color = method), alpha = 0.4) +
   xlab("Date") + ylab("Polls and result (log odds ratio)") +
   theme(text = element_text(size=20))
 p_states
@@ -50,3 +64,38 @@ I am only using the democratic primary race, due to a target analysis that is *s
 - plotting the state results after using [targets to correct them for bias]({site_url}/targets).
 
 This doesn't tell us much (yet!), but these new points probably tell us something about how the rest of the country is going to vote, assuming nothing changes.
+
+Future predictions?
+---
+
+Using the prediction from the Huffington Post, we can see how this is going to play out in the future.
+This is to take with a huge grain of salt: not every state is here, and many of them have not been polled since the beginning of February, when a lot of Sanders press started coming out.
+In addition, every candidate underperforms in surveys, due to undecided voters, so expect everyone to do better than expected (especially Sanders).
+To correct for that, I take the LOR of the Clinton share to the Sanders share, which correctly averages around 0, this may or may not be a bad idea.
+States whose primary day is past have their estimate replaced by the actual results.
+
+```{r, fig.width=17, fig.height=10, echo=FALSE}
+predictions <- merge(charts$charts, charts$estimates, by="slug")
+predictions <- subset(predictions, choice %in% c("Clinton", "Sanders")) %>%
+  subset(state != "US") %>%
+  mutate(prediction_lor = log(value/(100-value)))
+
+state_avg <- select(predictions, state, prediction_lor) %>%
+  group_by(state) %>%
+  summarize(poll_bias = mean(prediction_lor))
+predictions <- merge(predictions, state_avg, by="state")
+
+
+predictions <- merge(predictions, targets, by.x = c("state", "choice"), by.y = c("state_abb", "choice"))
+predictions <- mutate(predictions, date = as.Date(date)) %>%
+  mutate(target = ifelse(choice == "Sanders", -target, target)) %>%
+  mutate(Estimate = ifelse(is.na(Estimate), prediction_lor-poll_bias - target, Estimate))
+  
+#predictions <- subset(predictions, as.Date(last_updated) > as.Date("2016-01-15"))
+
+ggplot(predictions, aes(x=as.Date(date), y=Estimate, color=choice, label=state)) +
+  geom_text() + geom_smooth(method = "lm") +
+  facet_wrap(~ method) +
+  xlim(as.Date(c("2016-02-01", "2016-06-15"))) +
+  theme(text = element_text(size=20))
+```
