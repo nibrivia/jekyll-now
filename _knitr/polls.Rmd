@@ -19,6 +19,7 @@ d_polls <- pollstr_polls(topic = "2016-president-dem-primary", state = "US", aft
 d_candidates <- c("Clinton", "Sanders")
 d_questions <- subset(d_polls[["questions"]], question == "2016 National Democratic Primary" & choice %in% d_candidates & value > 0)
 d_polldata <- merge(d_polls$polls, d_questions, by = "id")
+d_polldata <- select(end_date, choice, value)
 
 targets <- read.csv("2016-dem-primary-targets-manual.csv")
 results <- read.csv("2016-dem-primary.csv")
@@ -51,6 +52,7 @@ p_states <- p +
   geom_point(data = targets, mapping=aes(x=date, y = Estimate, fill = choice, color = method), size=2) +
   geom_line(data = targets, mapping=aes(x=date, y = Estimate, fill = choice, color = method), alpha = 0.4) +
   xlab("Date") + ylab("Polls and result (log odds ratio)") +
+  facet_wrap(data = targets, ~ method) +
   theme(text = element_text(size=20))
 p_states
 ```
