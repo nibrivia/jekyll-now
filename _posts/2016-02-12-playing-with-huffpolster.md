@@ -22,7 +22,7 @@ length(d_polls$polls[,"id"])
 
 
 {% highlight text %}
-## [1] 266
+## [1] 267
 {% endhighlight %}
 
 So now, we can make cool plots, that look just like the ones the Huffington Post makes, except for the fact that I can plot them however I want :)!
