@@ -8,22 +8,7 @@ permalink : /polls/
 
 
 
-
-{% highlight text %}
-## Error in select_(.data, .dots = lazyeval::lazy_dots(...)): object 'end_date' not found
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in facet_wrap(data = targets, ~method): unused argument (data = targets)
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in eval(expr, envir, enclos): object 'p_states' not found
-{% endhighlight %}
+![center](/../figs/polls/unnamed-chunk-1-1.png)
 
 This chart seeks to satisfy some of my more particular desires in charts, as well as add a bit of information.
 I am only using the democratic primary race, due to a target analysis that is *significantly* easier to run in a 2-person race.
