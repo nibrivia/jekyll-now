@@ -11,28 +11,10 @@ permalink : /targets/
 States above the diagonal are where Clinton exceeded targets, below Sanders is exceeding target, more in my (first!) [blog post]({% post_url 2016-02-10-targets-v-results %})
 Arbitrarely, positive indicates "Clinton-ness", 0 is neutral and negative is "Sanders-ness".
 
-
-{% highlight text %}
-## Error in `$<-.data.frame`(`*tmp*`, "result", value = numeric(0)): replacement has 0 rows, data has 51
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Error: id variables not found in data: result
-{% endhighlight %}
-
-
-
-{% highlight text %}
-## Error in ggplot(state_targets, aes(x = value, y = result, color = variable)): object 'state_targets' not found
-{% endhighlight %}
+![center](/../figs/targets/unnamed-chunk-1-1.png)
 
 Because the distance from the diagonal is what we care about, here's a change of coordinates:
-
-{% highlight text %}
-## Error in ggplot(state_targets, aes(x = value, y = result - value, color = variable)): object 'state_targets' not found
-{% endhighlight %}
+![center](/../figs/targets/unnamed-chunk-2-1.png)
 The targets used are:
 
 - [Cook Political Report, Jan 21](http://cookpolitical.com/story/9179).

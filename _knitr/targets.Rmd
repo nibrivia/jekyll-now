@@ -8,6 +8,7 @@ permalink : /targets/
 
 ```{r setup, include=FALSE}
 require(ggplot2)
+require(dplyr)
 require(reshape2)
 ```
 
@@ -18,8 +19,10 @@ Arbitrarely, positive indicates "Clinton-ness", 0 is neutral and negative is "Sa
 targets <- read.csv("2016-dem-primary-targets-manual.csv")
 results <- read.csv("2016-dem-primary.csv")
 
-targets$state_abb <- state.abb[match(targets$state, state.name)]
-targets$result <- log(results$Clinton_popular_vote/results$Sanders_popular_vote)
+results <- mutate(results, state_abb = state.abb[match(state, state.name)]) %>%
+  mutate(result = log(Clinton_popular_vote/Sanders_popular_vote)) %>%
+  select(state, state_abb, result)
+targets <- merge(targets, results, by.x = "state")
 state_targets <- melt(targets, id.vars = c("state", "state_abb", "result"))
 
 ggplot(state_targets, aes(x = value, y = result, color=variable) ) +
@@ -27,7 +30,7 @@ ggplot(state_targets, aes(x = value, y = result, color=variable) ) +
   labs(title = "Various Targets v Results", x = "Targets", y = "Results", size = "Total delegates") +
   geom_abline(intercept = 0, slope=1, alpha = 0.5) +
   theme(text = element_text(size=20)) +
-  xlim(-1,1) + ylim(-1,1) +
+  xlim(-1.2,1.2) + ylim(-1.2,1.2) +
   facet_wrap(~ variable)
 ```
 

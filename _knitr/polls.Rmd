@@ -23,7 +23,7 @@ d_polldata <- merge(d_polls$polls, d_questions, by = "id")
 targets <- read.csv("2016-dem-primary-targets-manual.csv")
 results <- read.csv("2016-dem-primary.csv")
 results <- rename(results, FiveThirtyEight_margins = FiveThirtyEight_target)
-targets <- merge(results, targets, by="state")
+targets <- merge(results, targets, by.y = "state")
 
 targets <- mutate(targets, state_abb = state.abb[match(targets$state, state.name)]) %>%
   rename(state_name = state) %>%
