@@ -50,9 +50,8 @@ p <- p + geom_smooth(span = 0.5, method="loess")
 
 p_states <- p +
   geom_point(data = targets, mapping=aes(x=date, y = Estimate, group = choice, color = method), size=2) +
-  geom_line(data = targets, mapping=aes(x=date, y = Estimate, group = choice, color = method), alpha = 0.4) +
   xlab("Date") + ylab("Polls and result (log odds ratio)") +
-  facet_wrap(~ method) +
+  facet_wrap(~ method, ncol=1) +
   theme(text = element_text(size=20))
 p_states
 ```

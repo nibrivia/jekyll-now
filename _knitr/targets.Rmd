@@ -15,7 +15,7 @@ require(reshape2)
 States above the diagonal are where Clinton exceeded targets, below Sanders is exceeding target, more in my (first!) [blog post]({% post_url 2016-02-10-targets-v-results %})
 Arbitrarely, positive indicates "Clinton-ness", 0 is neutral and negative is "Sanders-ness".
 
-```{r, echo=FALSE, fig.width=11, warning=FALSE}
+```{r, echo=FALSE, fig.width=17, fig.height=11, warning=FALSE}
 targets <- read.csv("2016-dem-primary-targets-manual.csv")
 results <- read.csv("2016-dem-primary.csv")
 
@@ -30,19 +30,23 @@ ggplot(state_targets, aes(x = value, y = result, color=variable) ) +
   labs(title = "Various Targets v Results", x = "Targets", y = "Results", size = "Total delegates") +
   geom_abline(intercept = 0, slope=1, alpha = 0.5) +
   theme(text = element_text(size=20)) +
-  xlim(-1.2,1.2) + ylim(-1.2,1.2) +
-  facet_wrap(~ variable)
+  #xlim(-1.2,1.2) + ylim(-1.2,1.2) +
+  coord_equal() +
+  facet_wrap(~ variable) +
+  theme(legend.position = "none")
 ```
 
 Because the distance from the diagonal is what we care about, here's a change of coordinates:
-```{r, echo=FALSE, fig.width=11, warning=FALSE}
-ggplot(state_targets, aes(x = value, y = result-value, color=variable) ) +
+```{r, echo=FALSE, fig.width=17, fig.height=11, warning=FALSE}
+ggplot(state_targets, aes(x = value, y = result-value) ) +
   geom_text( aes(label=state_abb) ) +
+  geom_smooth(method="lm", alpha = 0.2) +
   labs(title = "Various Targets v Diff", x = "Targets", y = "Bias-corrected result") +
   geom_abline(intercept = 0, slope=0, alpha = 0.5) +
   theme(text = element_text(size=20)) +
-  xlim(-1,1) + ylim(-1,1) +
-  facet_wrap(~ variable)
+  coord_equal() +
+  facet_wrap(~ variable) +
+  theme(legend.position = "none")
 ```
 The targets used are:
 
