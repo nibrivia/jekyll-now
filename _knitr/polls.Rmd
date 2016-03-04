@@ -13,7 +13,7 @@ library(dplyr)
 library(pollstR)
 ```
 
-```{r, echo=FALSE, warning=FALSE, fig.width=17, fig.height=10}
+```{r, echo=FALSE, warning=FALSE, fig.width=17, fig.height=25}
 charts <- pollstr_charts(topic = "2016-president-dem-primary")
 d_polls <- pollstr_polls(topic = "2016-president-dem-primary", state = "US", after="2016-01-01", max_pages=500)
 d_candidates <- c("Clinton", "Sanders")
