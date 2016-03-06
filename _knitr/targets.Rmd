@@ -12,7 +12,7 @@ require(dplyr)
 require(reshape2)
 ```
 
-States above the diagonal are where Clinton exceeded targets, below Sanders is exceeding target, more in my (first!) [blog post]({% post_url 2016-02-10-targets-v-results %})
+States above the diagonal are where Clinton exceeded targets, below Sanders is exceeding target, more in my (first!) [blog post]({% post_url 2016-02-10-targets-v-results %}).
 Arbitrarely, positive indicates "Clinton-ness", 0 is neutral and negative is "Sanders-ness".
 
 ```{r, echo=FALSE, fig.width=17, fig.height=11, warning=FALSE}
