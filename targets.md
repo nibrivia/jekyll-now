@@ -8,7 +8,7 @@ permalink : /targets/
 
 
 
-States above the diagonal are where Clinton exceeded targets, below Sanders is exceeding target, more in my (first!) [blog post]({% post_url 2016-02-10-targets-v-results %})
+States above the diagonal are where Clinton exceeded targets, below Sanders is exceeding target, more in my (first!) [blog post]({% post_url 2016-02-10-targets-v-results %}).
 Arbitrarely, positive indicates "Clinton-ness", 0 is neutral and negative is "Sanders-ness".
 
 ![center](/../figs/targets/unnamed-chunk-1-1.png)
