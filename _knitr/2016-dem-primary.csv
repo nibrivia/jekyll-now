@@ -1,7 +1,7 @@
 state,Date,Clinton_popular_vote,Sanders_popular_vote
 Alabama,2016-03-01,77.8,19.2
-Alaska,2016-03-26,,
-Arizona,2016-03-22,,
+Alaska,2016-03-26,18.4,81.6
+Arizona,2016-03-22,57.6,39.9
 Arkansas,2016-03-01,66.3,29.7
 California,2016-06-07,,
 Colorado,2016-03-01,40.4,58.9
@@ -10,8 +10,8 @@ Delaware,2016-04-19,,
 District of Columbia,2016-06-14,,
 Florida,2016-03-15,64.5,33.3
 Georgia,2016-03-01,71.2,28.3
-Hawaii,2016-03-26,,
-Idaho,2016-03-22,,
+Hawaii,2016-03-26,30,69.8
+Idaho,2016-03-22,21.2,78
 Illinois,2016-03-15,50.5,48.7
 Indiana,2016-05-03,,
 Iowa,2016-02-01,49.86,49.57
@@ -43,10 +43,10 @@ South Carolina,2016-02-27,73.5,26
 South Dakota,2016-06-07,,
 Tennessee,2016-03-01,66.1,32.4
 Texas,2016-03-01,65.2,33.2
-Utah,2016-03-22,,
+Utah,2016-03-22,20.3,79.3
 Vermont,2016-03-01,13.6,86.1
 Virginia,2016-03-01,64.3,35.2
-Washington,2016-03-26,,
+Washington,2016-03-26,27.1,72.7
 West Virginia,2016-05-10,,
 Wisconsin,2016-04-05,,
 Wyoming,2016-04-09,,
